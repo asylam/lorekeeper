@@ -25,8 +25,7 @@ class FetchQuestService extends Service {
     /**
      * Creates a new fetch quest.
      *
-     * @param \App\Models\User\User $user
-     * @param array                 $data 
+     * @param array $data
      *
      * @return \App\Models\FetchQuest\FetchQuest|bool
      */
@@ -38,6 +37,7 @@ class FetchQuestService extends Service {
             if (!$this->logAdminAction($user, 'Created Fetch Quest', 'Created '.$quest->name)) {
                 throw new \Exception('Failed to log admin action.');
             }
+
             return $this->commitReturn($quest);
         } catch (\Exception $e) {
             $this->setError('error', $e->getMessage());
@@ -50,7 +50,6 @@ class FetchQuestService extends Service {
      * Updates a fetch quest.
      *
      * @param \App\Models\FetchQuest\FetchQuest $quest
-     * @param \App\Models\User\User             $user
      * @param array                             $data
      *
      * @return \App\Models\FetchQuest\FetchQuest|bool
@@ -81,7 +80,6 @@ class FetchQuestService extends Service {
      * Deletes a fetch quest.
      *
      * @param \App\Models\FetchQuest\FetchQuest $quest
-     * @param \App\Models\User\User             $user
      *
      * @return bool
      */

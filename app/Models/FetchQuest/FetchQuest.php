@@ -2,26 +2,32 @@
 
 namespace App\Models\FetchQuest;
 
-use App\Models\Model;
 use App\Models\Item\Item;
+use App\Models\Model;
 
-class FetchQuest extends Model
-{
-    /** 
+class FetchQuest extends Model {
+    /**
      * The attributes that are mass assignable.
-     * 
-     * @var array 
-    */
+     *
+     * @var array
+     */
     protected $fillable = [
         'name', 'is_active', 'completed', 'request_item_id', 'reward_item_id',
     ];
 
-     /**
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'fetch_quests';
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['requestItem', 'rewardItem'];
 
     /**
      * Validation rules for quest creation.
@@ -45,13 +51,6 @@ class FetchQuest extends Model
         'reward_item_id'     => 'required|exists:items,id',
     ];
 
-    /**
-    * The relationships that should always be loaded.
-    *
-    * @var array
-    */
-    protected $with = ['requestItem', 'rewardItem'];
-
     /**********************************************************************************************
 
         RELATIONS
@@ -61,16 +60,14 @@ class FetchQuest extends Model
     /**
      * Get the item that is requested.
      */
-    public function requestItem()
-    {
+    public function requestItem() {
         return $this->belongsTo(Item::class, 'request_item_id');
     }
 
     /**
      * Get the item that is rewarded.
      */
-    public function rewardItem()
-    {
+    public function rewardItem() {
         return $this->belongsTo(Item::class, 'reward_item_id');
     }
 }

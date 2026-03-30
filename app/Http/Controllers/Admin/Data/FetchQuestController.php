@@ -49,7 +49,7 @@ class FetchQuestController extends Controller {
     public function getCreateFetchQuest() {
         return view('admin.fetch_quests.create_edit_fetch_quest', [
             'quest'           => new FetchQuest,
-            'is_active'       => [1,2],
+            'is_active'       => [1, 2],
             'request_item_id' => Item::orderBy('name')->pluck('name', 'id'),
             'reward_item_id'  => Item::orderBy('name')->pluck('name', 'id'),
         ]);
@@ -70,13 +70,13 @@ class FetchQuestController extends Controller {
 
         return view('admin.fetch_quests.create_edit_fetch_quest', [
             'quest'           => $quest,
-            'is_active'       => [1,2],
+            'is_active'       => [1, 2],
             'request_item_id' => Item::orderBy('name')->pluck('name', 'id'),
             'reward_item_id'  => Item::orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
-     /**
+    /**
      * Creates or edits a fetch quest.
      *
      * @param App\Services\FetchQuestService $service
@@ -89,9 +89,9 @@ class FetchQuestController extends Controller {
         $data = $request->only([
             'name', 'is_active', 'request_item_id', 'request_item_quantity', 'reward_item_id', 'reward_item_quantity',
         ]);
-        if ($id && $service->updateFetchQuest(FetchQuest::find($id), $data, Auth::user() )) {
+        if ($id && $service->updateFetchQuest(FetchQuest::find($id), $data, Auth::user())) {
             flash('Fetch quest updated successfully.')->success();
-        } elseif (!$id && $quest = $service->createFetchQuest($data, Auth::user() )) {
+        } elseif (!$id && $quest = $service->createFetchQuest($data, Auth::user())) {
             flash('Fetch quest created successfully.')->success();
 
             return redirect()->to('admin/data/fetch-quests/edit/'.$quest->id);
@@ -104,7 +104,7 @@ class FetchQuestController extends Controller {
         return redirect()->back();
     }
 
-     /**
+    /**
      * Gets the quest deletion modal.
      *
      * @param int $id
@@ -128,7 +128,7 @@ class FetchQuestController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postDeleteFetchQuest(Request $request, FetchQuestService $service, $id) {
-        if ($id && $service->deleteFetchQuest(FetchQuest::find($id), Auth::user() )) {
+        if ($id && $service->deleteFetchQuest(FetchQuest::find($id), Auth::user())) {
             flash('Fetch quest deleted successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) {
@@ -138,5 +138,4 @@ class FetchQuestController extends Controller {
 
         return redirect()->to('admin/data/fetch-quests');
     }
-    
 }
