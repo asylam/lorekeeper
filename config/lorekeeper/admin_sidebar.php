@@ -194,6 +194,10 @@ return [
                 'name' => 'Items',
                 'url'  => 'admin/data/items',
             ],
+            [
+                'name' => 'Fetch Quests',
+                'url'  => 'admin/data/fetch-quests?is_active=1',
+            ],
         ],
     ],
     'Raffles'    => [

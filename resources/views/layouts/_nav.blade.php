@@ -116,6 +116,9 @@
                         <a class="dropdown-item" href="{{ url('shops') }}">
                             Shops
                         </a>
+                        <a class="dropdown-item" href="{{ url('fetch-quests') }}">
+                            Fetch Quests
+                        </a>
                     </div>
                 </li>
                 <li class="nav-item">

@@ -238,6 +238,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('prompts/create', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/edit/{id?}', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/delete/{id}', 'PromptController@postDeletePrompt');
+
+    // FETCH QUESTS
+    Route::get('fetch-quests', 'FetchQuestController@getIndex');
+    Route::get('fetch-quests/create', 'FetchQuestController@getCreateFetchQuest');
+    Route::get('fetch-quests/edit/{id}', 'FetchQuestController@getEditFetchQuest');
+    Route::get('fetch-quests/delete/{id}', 'FetchQuestController@getDeleteFetchQuest');
+    Route::post('fetch-quests/create', 'FetchQuestController@postCreateEditFetchQuest');
+    Route::post('fetch-quests/edit/{id?}', 'FetchQuestController@postCreateEditFetchQuest');
+    Route::post('fetch-quests/delete/{id}', 'FetchQuestController@postDeleteFetchQuest');
 });
 
 // PAGES

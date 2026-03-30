@@ -126,6 +126,12 @@ Route::group(['prefix' => 'shops'], function () {
     Route::get('{id}/{stockId}', 'ShopController@getShopStock')->where(['id' => '[0-9]+', 'stockId' => '[0-9]+']);
 });
 
+Route::group(['prefix' => 'fetch-quests'], function () {
+    Route::get('/', 'FetchQuestController@getIndex');
+    Route::get('{id}', 'FetchQuestController@getFetchQuest')->where(['id' => '[0-9]+']);
+    Route::post('{id}/complete', 'FetchQuestController@postCompleteFetchQuest')->where(['id' => '[0-9]+']);
+});
+
 /**************************************************************************************************
     Site Pages
 **************************************************************************************************/
