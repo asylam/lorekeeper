@@ -4,8 +4,8 @@
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">Fetch Quests</div>
-        @foreach($quests as $quest)
+        @foreach ($quests as $quest)
             <div class="sidebar-item"><a href="{{ url('fetch-quests/' . $quest->id) }}" class="{{ set_active('fetch-quests/' . $quest->id) }}">{{ $quest->name }}</a></div>
-        @endforeach 
+        @endforeach
     </li>
 </ul>

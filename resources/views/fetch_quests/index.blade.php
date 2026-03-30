@@ -14,7 +14,7 @@
     <div class="row shops-row">
         @foreach ($quests as $quest)
             <div class="col-md-3 col-6 mb-3 text-center">
-               <div class="shop-name mt-1">
+                <div class="shop-name mt-1">
                     <a href="{{ url('fetch-quests/' . $quest->id) }}" class="h5 mb-0">{{ $quest->name }}</a>
                 </div>
             </div>

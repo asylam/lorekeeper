@@ -5,7 +5,11 @@
 @endsection
 
 @section('admin-content')
-    {!! breadcrumbs(['Admin Panel' => 'admin', 'Fetch Quests' => 'admin/data/fetch-quests?is_active=1', ($quest->id ? 'Edit' : 'Create') . ' Fetch Quest' => $quest->id ? 'admin/data/fetch-quests/edit/' . $quest->id : 'admin/data/fetch-quests/create']) !!}
+    {!! breadcrumbs([
+        'Admin Panel' => 'admin',
+        'Fetch Quests' => 'admin/data/fetch-quests?is_active=1',
+        ($quest->id ? 'Edit' : 'Create') . ' Fetch Quest' => $quest->id ? 'admin/data/fetch-quests/edit/' . $quest->id : 'admin/data/fetch-quests/create',
+    ]) !!}
 
     <h1>{{ $quest->id ? 'Edit' : 'Create' }} Fetch Quest
         @if ($quest->id)
@@ -23,16 +27,16 @@
                 {!! Form::label('Name') !!}
                 {!! Form::text('name', $quest->name, ['class' => 'form-control']) !!}
             </div>
-            </div>
-            <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                {!! Form::label('Active') !!}
                 <div class="form-group">
-                    {!! Form::label('Active') !!}
-                    <div class="form-group">
-                        {!! Form::hidden('is_active', 2) !!}
-                        {!! Form::checkbox('is_active', 1, $quest->is_active == 1, ['data-toggle' => 'toggle']) !!}
-                    </div>
+                    {!! Form::hidden('is_active', 2) !!}
+                    {!! Form::checkbox('is_active', 1, $quest->is_active == 1, ['data-toggle' => 'toggle']) !!}
                 </div>
             </div>
+        </div>
     </div>
 
     <div class="row">

@@ -10,6 +10,5 @@
 </div>
 
 @section('scripts')
-    <script>
-    </script>
+    <script></script>
 @endsection
