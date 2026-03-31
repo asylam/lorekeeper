@@ -12,8 +12,15 @@ return new class extends Migration {
         Schema::create('fetch_quests', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('has_image')->default(false);
+            $table->text('description')->nullable();
+            $table->text('parsed_description')->nullable();
+            $table->text('greeting_message')->nullable();
+            $table->text('request_message')->nullable();
+            $table->text('completion_message')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('completed')->default(false);
+            $table->string('hash')->nullable();
 
             $table->unsignedInteger('request_item_id');
             $table->unsignedInteger('reward_item_id');

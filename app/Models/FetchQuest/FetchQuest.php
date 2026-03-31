@@ -12,7 +12,9 @@ class FetchQuest extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'is_active', 'completed', 'request_item_id', 'reward_item_id',
+        'name', 'is_active', 'has_image', 'description', 'parsed_description', 
+        'completed', 'greeting_message', 'request_message', 'completion_message',
+        'request_item_id', 'reward_item_id', 'hash',
     ];
 
     /**
@@ -36,8 +38,14 @@ class FetchQuest extends Model {
      */
     public static $createRules = [
         'name'               => 'required|unique:fetch_quests|between:3,100',
+        'description'        => 'nullable',
+        'parsed_description' => 'nullable',
+        'greeting_message'   => 'nullable',
+        'request_message'    => 'nullable',
+        'completion_message' => 'nullable',
         'request_item_id'    => 'required|exists:items,id',
         'reward_item_id'     => 'required|exists:items,id',
+        'image'              => 'mimes:png',
     ];
 
     /**
@@ -47,8 +55,14 @@ class FetchQuest extends Model {
      */
     public static $updateRules = [
         'name'               => 'required|between:3,100',
+        'description'        => 'nullable',
+        'parsed_description' => 'nullable',
+        'greeting_message'   => 'nullable',
+        'request_message'    => 'nullable',
+        'completion_message' => 'nullable',
         'request_item_id'    => 'required|exists:items,id',
         'reward_item_id'     => 'required|exists:items,id',
+        'image'              => 'mimes:png',
     ];
 
     /**********************************************************************************************
@@ -69,5 +83,51 @@ class FetchQuest extends Model {
      */
     public function rewardItem() {
         return $this->belongsTo(Item::class, 'reward_item_id');
+    }
+
+    /**********************************************************************************************
+
+        ACCESSORS
+
+    **********************************************************************************************/
+
+    /**
+     * Gets the file directory containing the model's image.
+     *
+     * @return string
+     */
+    public function getImageDirectoryAttribute() {
+        return 'images/data/fetch-quests';
+    }
+
+    /**
+     * Gets the file name of the model's image.
+     *
+     * @return string
+     */
+    public function getFetchQuestImageFileNameAttribute() {
+        return $this->hash.$this->id.'-image.png';
+    }
+
+    /**
+     * Gets the path to the file directory containing the model's image.
+     *
+     * @return string
+     */
+    public function getFetchQuestImagePathAttribute() {
+        return public_path($this->imageDirectory);
+    }
+
+    /**
+     * Gets the URL of the model's image.
+     *
+     * @return string
+     */
+    public function getFetchQuestImageUrlAttribute() {
+        if (!$this->has_image) {
+            return null;
+        }
+
+        return asset($this->imageDirectory.'/'.$this->fetchQuestImageFileName);
     }
 }

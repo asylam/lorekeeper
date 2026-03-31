@@ -87,7 +87,9 @@ class FetchQuestController extends Controller {
     public function postCreateEditFetchQuest(Request $request, FetchQuestService $service, $id = null) {
         $id ? $request->validate(FetchQuest::$updateRules) : $request->validate(FetchQuest::$createRules);
         $data = $request->only([
-            'name', 'is_active', 'request_item_id', 'request_item_quantity', 'reward_item_id', 'reward_item_quantity',
+            'name', 'is_active', 'image', 'remove_image', 'description',
+            'greeting_message', 'request_message', 'completion_message',
+            'request_item_id', 'reward_item_id',
         ]);
         if ($id && $service->updateFetchQuest(FetchQuest::find($id), $data, Auth::user())) {
             flash('Fetch quest updated successfully.')->success();

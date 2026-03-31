@@ -33,9 +33,26 @@ class FetchQuestService extends Service {
         DB::beginTransaction();
 
         try {
+            $data = $this->populateQuestData($data);
+
+            $image = null;
+            if (isset($data['image']) && $data['image']) {
+                $data['has_image'] = 1;
+                $data['hash'] = uniqueHash(FetchQuest::class);
+                $image = $data['image'];
+                unset($data['image']);
+            } else {
+                $data['has_image'] = 0;
+            }
+
             $quest = FetchQuest::create($data);
+            
             if (!$this->logAdminAction($user, 'Created Fetch Quest', 'Created '.$quest->name)) {
                 throw new \Exception('Failed to log admin action.');
+            }
+
+            if ($image) {
+                $this->handleImage($image, $quest->fetchQuestImagePath, $quest->fetchQuestImageFileName);
             }
 
             return $this->commitReturn($quest);
@@ -62,7 +79,21 @@ class FetchQuestService extends Service {
                 throw new \Exception('The name has already been taken.');
             }
 
+            $data = $this->populateQuestData($data, $quest);
+
+            $image = null;
+            if (isset($data['image']) && $data['image']) {
+                $data['has_image'] = 1;
+                $data['hash'] = uniqueHash(FetchQuest::class);
+                $image = $data['image'];
+                unset($data['image']);
+            }
+
             $quest->update($data);
+
+            if ($quest) {
+                $this->handleImage($image, $quest->fetchQuestImagePath, $quest->fetchQuestImageFileName);
+            }
 
             if (!$this->logAdminAction($user, 'Updated Fetch Quest', 'Updated '.$quest->name)) {
                 throw new \Exception('Failed to log admin action.');
@@ -100,4 +131,31 @@ class FetchQuestService extends Service {
 
         return $this->rollbackReturn(false);
     }
+
+    /**
+     * Processes user input for creating/updating a quest.
+     *
+     * @param array                             $data
+     * @param \App\Models\FetchQuest\FetchQuest $quest
+     *
+     * @return array
+     */
+    private function populateQuestData($data, $quest = null) {
+        if (isset($data['description']) && $data['description']) {
+            $data['parsed_description'] = parse($data['description']);
+        } else {
+            $data['parsed_description'] = null;
+        }   
+        
+        if (isset($data['remove_image'])) {
+        if ($quest && $quest->has_image && $data['remove_image']) {
+            $data['has_image'] = 0;
+            $this->deleteImage($quest->fetchQuestImagePath, $quest->fetchQuestImageFileName);
+        }
+        unset($data['remove_image']);
+        }
+
+        return $data;
+    }
+
 }
