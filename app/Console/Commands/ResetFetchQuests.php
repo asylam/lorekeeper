@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\FetchQuest\FetchQuest;
+use App\Models\FetchQuest\UserQuest;
 use Illuminate\Console\Command;
 
 class ResetFetchQuests extends Command {
@@ -33,7 +33,7 @@ class ResetFetchQuests extends Command {
      * @return int
      */
     public function handle() {
-        FetchQuest::where('is_active', 1)->update(['completed' => 2]);
+        UserQuest::truncate();
         $this->info('Fetch quests reset successfully.');
     }
 }

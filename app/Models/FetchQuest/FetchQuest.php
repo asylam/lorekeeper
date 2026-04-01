@@ -2,8 +2,11 @@
 
 namespace App\Models\FetchQuest;
 
+use App\Models\FetchQuest\UserQuest;
 use App\Models\Item\Item;
+use App\Models\User\User;
 use App\Models\Model;
+use Illuminate\Support\Facades\Auth;
 
 class FetchQuest extends Model {
     /**
@@ -13,7 +16,7 @@ class FetchQuest extends Model {
      */
     protected $fillable = [
         'name', 'is_active', 'has_image', 'description', 'parsed_description', 
-        'completed', 'greeting_message', 'request_message', 'completion_message',
+        'greeting_message', 'request_message', 'completion_message', 'expired_message',
         'request_item_id', 'reward_item_id', 'hash',
     ];
 
@@ -43,6 +46,7 @@ class FetchQuest extends Model {
         'greeting_message'   => 'nullable',
         'request_message'    => 'nullable',
         'completion_message' => 'nullable',
+        'expired_message'    => 'nullable',
         'request_item_id'    => 'required|exists:items,id',
         'reward_item_id'     => 'required|exists:items,id',
         'image'              => 'mimes:png',
@@ -60,6 +64,7 @@ class FetchQuest extends Model {
         'greeting_message'   => 'nullable',
         'request_message'    => 'nullable',
         'completion_message' => 'nullable',
+        'expired_message'    => 'nullable',
         'request_item_id'    => 'required|exists:items,id',
         'reward_item_id'     => 'required|exists:items,id',
         'image'              => 'mimes:png',
@@ -91,6 +96,19 @@ class FetchQuest extends Model {
 
     **********************************************************************************************/
 
+    /**
+     * Gets the current user's active quest for this quest, if it exists.
+     * 
+     * @return App\Models\FetchQuest\UserQuest|null
+     */
+    public function getActiveUserQuestAttribute() {
+        $userQuest = UserQuest::where('fetch_quest_id', $this->id)
+            ->where('user_id', Auth::user()->id)
+            ->latest()->first();
+
+        return $userQuest && $userQuest->active ? $userQuest : null;
+    }
+    
     /**
      * Gets the file directory containing the model's image.
      *

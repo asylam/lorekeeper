@@ -1,7 +1,6 @@
 <div class="row text-center">
     <div class="col-md-12 text-center mb-4">
-        <h3>Quest {{ $activeUserQuest->completed ? 'Completed!' : 'Expired...' }}</h3>
-        Resets in {{ now()->diff(now()->endOfDay())->format('%hh %im') }}
+        <h4>Time has run out!</h4>
     </div>
     @if ($quest->has_image)
         <div class="col-12 text-center">
@@ -10,13 +9,16 @@
             </div>
         </div>
     @endif
-    @if ($activeUserQuest->completed && $quest->completion_message)
-        <div class="col-12 m-3">
-            <h5>"{{ $quest->completion_message }}"</h5>
-        </div>
-    @elseif ($activeUserQuest->expired && $quest->expired_message)
+    @if ($quest->expired_message)
         <div class="col-12 m-3">
             <h5>"{{ $quest->expired_message }}"</h5>
         </div>
     @endif
+</div>
+<div class="row text-center">
+    <div class="col-12">
+        {!! Form::open(['url' => 'fetch-quests/' . $quest->id . '/abandon']) !!}
+        {!! Form::submit('Abandon Quest', ['class' => 'btn btn-primary']) !!}
+        {!! Form::close() !!}
+    </div>
 </div>

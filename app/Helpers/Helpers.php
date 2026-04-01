@@ -447,16 +447,3 @@ function prettyProfileName($url) {
         return $url;
     }
 }
-
-/**
- * Generates a unique random string to be used as an image hash for a model.
- * 
- * @param string $model
- */
-function uniqueHash($model) {
-    do  {
-        $hash = randomString(10);
-    } while ($model::where('hash', $hash)->first());
-
-    return $hash;
-}

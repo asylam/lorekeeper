@@ -129,7 +129,9 @@ Route::group(['prefix' => 'shops'], function () {
 Route::group(['prefix' => 'fetch-quests'], function () {
     Route::get('/', 'FetchQuestController@getIndex');
     Route::get('{id}', 'FetchQuestController@getFetchQuest')->where(['id' => '[0-9]+']);
+    Route::post('{id}/accept', 'FetchQuestController@postAcceptFetchQuest')->where(['id' => '[0-9]+']);
     Route::post('{id}/complete', 'FetchQuestController@postCompleteFetchQuest')->where(['id' => '[0-9]+']);
+    Route::post('{id}/abandon', 'FetchQuestController@postAbandonFetchQuest')->where(['id' => '[0-9]+']);
 });
 
 /**************************************************************************************************

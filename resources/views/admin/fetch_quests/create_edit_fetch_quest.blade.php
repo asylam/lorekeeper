@@ -72,15 +72,17 @@
                 {!! Form::label('Greeting Message') !!}
                 {!! Form::text('greeting_message', $quest->greeting_message, ['class' => 'form-control']) !!}
             </div>
-
             <div class="form-group">
                 {!! Form::label('Request Message') !!}
                 {!! Form::text('request_message', $quest->request_message, ['class' => 'form-control']) !!}
             </div>
-
             <div class="form-group">
                 {!! Form::label('Completion Message') !!}
                 {!! Form::text('completion_message', $quest->completion_message, ['class' => 'form-control']) !!}
+            </div>
+            <div class="form-group">
+                {!! Form::label('Expired Message') !!}
+                {!! Form::text('expired_message', $quest->expired_message, ['class' => 'form-control']) !!}
             </div>
         </div>
     </div>
