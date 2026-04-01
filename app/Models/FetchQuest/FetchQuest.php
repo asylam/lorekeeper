@@ -12,7 +12,7 @@ class FetchQuest extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'is_active', 'has_image', 'description', 'parsed_description', 
+        'name', 'is_active', 'has_image', 'description', 'parsed_description',
         'completed', 'greeting_message', 'request_message', 'completion_message',
         'request_item_id', 'reward_item_id', 'hash',
     ];
