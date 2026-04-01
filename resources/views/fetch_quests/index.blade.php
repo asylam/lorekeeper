@@ -16,7 +16,7 @@
             <div class="col-md-3 col-6 mb-3 text-center">
                 @if ($quest->has_image)
                     <div class="shop-image">
-                        <a href="{{ url('fetch-quests/' . $quest->id) }}"><img src="{{ $quest->FetchQuestImageUrl }}" alt="{{ $quest->name }}"  style="max-height: 200px"/></a>
+                        <a href="{{ url('fetch-quests/' . $quest->id) }}"><img src="{{ $quest->FetchQuestImageUrl }}" alt="{{ $quest->name }}" style="max-height: 200px" /></a>
                     </div>
                 @endif
                 <div class="shop-name mt-1">

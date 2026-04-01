@@ -7,7 +7,7 @@
     @if ($quest->has_image)
         <div class="col-12 text-center">
             <div class="shop-image">
-                <img src="{{ $quest->FetchQuestImageUrl }}" alt="{{ $quest->name }}" class="mw-100"/>
+                <img src="{{ $quest->FetchQuestImageUrl }}" alt="{{ $quest->name }}" class="mw-100" />
             </div>
         </div>
     @endif
