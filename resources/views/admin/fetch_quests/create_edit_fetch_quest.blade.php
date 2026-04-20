@@ -16,7 +16,7 @@
             Editing (<a href='/fetch-quests/{{ $quest->id }}'>{{ $quest->name }}</a>)
             <a href="#" class="btn btn-outline-danger float-right delete-quest-button">Delete Fetch Quest</a>
         @else
-            Create Fetch Quest 
+            Create Fetch Quest
         @endif
     </h1>
 
@@ -52,7 +52,7 @@
         @if ($quest->has_image)
             <div class="form-check">
                 <div class="shop-image text-center">
-                    <a href="{{ $quest->FetchQuestImageUrl }}"><img src="{{ $quest->FetchQuestImageUrl }}" alt="{{ $quest->name }}" style="max-height:200px"/></a>
+                    <a href="{{ $quest->FetchQuestImageUrl }}"><img src="{{ $quest->FetchQuestImageUrl }}" alt="{{ $quest->name }}" style="max-height:200px" /></a>
                 </div>
                 <div class="text-right mr-3">
                     {!! Form::checkbox('remove_image', 1, false, ['class' => 'form-check-input']) !!}

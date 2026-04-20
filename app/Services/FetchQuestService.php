@@ -46,7 +46,7 @@ class FetchQuestService extends Service {
             }
 
             $quest = FetchQuest::create($data);
-            
+
             if (!$this->logAdminAction($user, 'Created Fetch Quest', 'Created '.$quest->name)) {
                 throw new \Exception('Failed to log admin action.');
             }
@@ -145,17 +145,16 @@ class FetchQuestService extends Service {
             $data['parsed_description'] = parse($data['description']);
         } else {
             $data['parsed_description'] = null;
-        }   
-        
-        if (isset($data['remove_image'])) {
-        if ($quest && $quest->has_image && $data['remove_image']) {
-            $data['has_image'] = 0;
-            $this->deleteImage($quest->fetchQuestImagePath, $quest->fetchQuestImageFileName);
         }
-        unset($data['remove_image']);
+
+        if (isset($data['remove_image'])) {
+            if ($quest && $quest->has_image && $data['remove_image']) {
+                $data['has_image'] = 0;
+                $this->deleteImage($quest->fetchQuestImagePath, $quest->fetchQuestImageFileName);
+            }
+            unset($data['remove_image']);
         }
 
         return $data;
     }
-
 }
