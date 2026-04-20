@@ -39,7 +39,7 @@ return new class extends Migration {
         // Create user_quests table
         Schema::create('user_quests', function (Blueprint $table) {
             $table->increments('id');
-            
+
             $table->enum('status', ['accepted', 'completed', 'expired'])->default('accepted');
             $table->timestamp('due_at');
             $table->timestamp('completed_at')->nullable();
@@ -65,7 +65,7 @@ return new class extends Migration {
         // Create quest_items table (replaces denormalized fields)
         Schema::create('quest_items', function (Blueprint $table) {
             $table->increments('id');
-            
+
             $table->unsignedInteger('user_quest_id');
             $table->enum('type', ['request', 'reward']);
             $table->string('rewardable_type');

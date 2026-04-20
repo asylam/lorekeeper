@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\FetchQuest\FetchQuest;
-use App\Models\Item\Item;
 use App\Models\Loot\LootTable;
 use App\Services\FetchQuestService;
 use Illuminate\Http\Request;

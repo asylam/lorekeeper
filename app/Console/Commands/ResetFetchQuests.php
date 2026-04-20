@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\FetchQuest\UserQuest;
-use App\Models\FetchQuest\QuestItem;
 use Illuminate\Console\Command;
 
 /**
@@ -40,7 +39,7 @@ class ResetFetchQuests extends Command {
     public function handle() {
         // Delete all user quests - this will trigger cascade deletes for related quest_items
         UserQuest::query()->delete();
-        
+
         $this->info('Fetch quests reset successfully.');
     }
 }

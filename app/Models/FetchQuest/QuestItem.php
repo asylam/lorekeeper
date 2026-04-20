@@ -37,9 +37,9 @@ class QuestItem extends Model {
     /**
      * Create quest items by rolling a loot table and storing all results.
      *
-     * @param UserQuest $userQuest
-     * @param string $type 'request' or 'reward'
+     * @param string                     $type      'request' or 'reward'
      * @param \App\Models\Loot\LootTable $lootTable
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public static function createFromRolledLoot(UserQuest $userQuest, $type, $lootTable) {
@@ -53,11 +53,11 @@ class QuestItem extends Model {
             if (isset($rewards['items']) && is_array($rewards['items'])) {
                 foreach ($rewards['items'] as $itemData) {
                     $item = self::create([
-                        'user_quest_id' => $userQuest->id,
-                        'type' => $type,
+                        'user_quest_id'   => $userQuest->id,
+                        'type'            => $type,
                         'rewardable_type' => 'Item',
-                        'rewardable_id' => $itemData['asset']->id,
-                        'quantity' => $itemData['quantity'] ?? 1,
+                        'rewardable_id'   => $itemData['asset']->id,
+                        'quantity'        => $itemData['quantity'] ?? 1,
                     ]);
                     $createdItems->push($item);
                 }
@@ -67,17 +67,17 @@ class QuestItem extends Model {
             if (isset($rewards['currencies']) && is_array($rewards['currencies'])) {
                 foreach ($rewards['currencies'] as $currencyData) {
                     $item = self::create([
-                        'user_quest_id' => $userQuest->id,
-                        'type' => $type,
+                        'user_quest_id'   => $userQuest->id,
+                        'type'            => $type,
                         'rewardable_type' => 'Currency',
-                        'rewardable_id' => $currencyData['asset']->id,
-                        'quantity' => $currencyData['quantity'] ?? 1,
+                        'rewardable_id'   => $currencyData['asset']->id,
+                        'quantity'        => $currencyData['quantity'] ?? 1,
                     ]);
                     $createdItems->push($item);
                 }
             }
         } catch (\Exception $e) {
-            \Log::error("Error rolling loot table for quest item: " . $e->getMessage());
+            \Log::error('Error rolling loot table for quest item: '.$e->getMessage());
         }
 
         return $createdItems;
@@ -125,14 +125,16 @@ class QuestItem extends Model {
      */
     public function getDisplayNameAttribute() {
         $quantity = $this->quantity;
-        
+
         switch ($this->rewardable_type) {
             case 'Item':
                 $item = \App\Models\Item\Item::find($this->rewardable_id);
-                return ($quantity > 1 ? $quantity.'x ' : '') . ($item ? $item->name : 'Unknown Item');
+
+                return ($quantity > 1 ? $quantity.'x ' : '').($item ? $item->name : 'Unknown Item');
             case 'Currency':
                 $currency = \App\Models\Currency\Currency::find($this->rewardable_id);
-                return ($quantity > 1 ? $quantity.'x ' : '') . ($currency ? $currency->name : 'Unknown Currency');
+
+                return ($quantity > 1 ? $quantity.'x ' : '').($currency ? $currency->name : 'Unknown Currency');
             default:
                 return 'Unknown Reward';
         }

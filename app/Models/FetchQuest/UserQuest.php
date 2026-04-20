@@ -3,14 +3,10 @@
 namespace App\Models\FetchQuest;
 
 use App\Models\Item\Item;
-use App\Models\User\User;
 use App\Models\Model;
-use App\Models\Loot\LootTable;
+use App\Models\User\User;
 
 class UserQuest extends Model {
-
-    public $timestamps = true;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +14,7 @@ class UserQuest extends Model {
      */
     protected $fillable = [
         'fetch_quest_id', 'user_id', 'status', 'due_at',
-        'completed_at', 'expired_at', 'created_at'
+        'completed_at', 'expired_at', 'created_at',
     ];
 
     /**
@@ -36,6 +32,19 @@ class UserQuest extends Model {
     protected $with = ['fetchQuest', 'user'];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'due_at'         => 'datetime',
+        'completed_at'   => 'datetime',
+        'expired_at'     => 'datetime',
+    ];
+
+    public $timestamps = true;
+
+    /**
      * Validation rules for quest creation.
      *
      * @var array
@@ -43,17 +52,6 @@ class UserQuest extends Model {
     public static $createRules = [
         'fetch_quest_id'     => 'required|exists:fetch_quests,id',
         'user_id'            => 'required|exists:users,id',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'due_at' => 'datetime',
-        'completed_at'   => 'datetime',
-        'expired_at'   => 'datetime',
     ];
 
     /**********************************************************************************************
@@ -67,7 +65,7 @@ class UserQuest extends Model {
      */
     public function fetchQuest() {
         return $this->belongsTo(FetchQuest::class);
-    } 
+    }
 
     /**
      * Get the user who owns this quest.
@@ -110,17 +108,15 @@ class UserQuest extends Model {
 
     **********************************************************************************************/
 
-    
-
     /**
      * Gets whether or not the quest is accepted.
-     *  
+     *
      * @return bool
      */
     public function getAcceptedAttribute() {
         return $this->status === 'accepted';
     }
-    
+
     /**
      * Gets whether or not the quest is completed.
      *
@@ -132,7 +128,7 @@ class UserQuest extends Model {
 
     /**
      * Gets whether or not the quest is expired.
-     *  
+     *
      * @return bool
      */
     public function getExpiredAttribute() {
@@ -141,7 +137,7 @@ class UserQuest extends Model {
 
     /**
      * Gets whether or not the quest is past due.
-     *  
+     *
      * @return bool
      */
     public function getPastDueAttribute() {
@@ -150,8 +146,8 @@ class UserQuest extends Model {
 
     /**
      * Gets whether or not the quest is active.
-     * active = created today or needs to be abandoned
-     *  
+     * active = created today or needs to be abandoned.
+     *
      * @return bool
      */
     public function getActiveAttribute() {
@@ -164,7 +160,7 @@ class UserQuest extends Model {
      * @return array
      */
     public function getRewardDisplayNamesAttribute() {
-        return $this->rewardItems->map(fn($item) => $item->display_name)->toArray();
+        return $this->rewardItems->map(fn ($item) => $item->display_name)->toArray();
     }
 
     /**********************************************************************************************
@@ -186,7 +182,7 @@ class UserQuest extends Model {
             if ($fetchQuest) {
                 // Roll and create request quest item
                 QuestItem::createFromRolledLoot($userQuest, 'request', $fetchQuest->requestTable);
-                
+
                 // Roll and create reward quest item
                 QuestItem::createFromRolledLoot($userQuest, 'reward', $fetchQuest->rewardTable);
             }

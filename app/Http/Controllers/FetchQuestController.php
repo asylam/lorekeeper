@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\FetchQuest\FetchQuest;
-use App\Models\FetchQuest\UserQuest;
 use App\Services\FetchQuestManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,9 +46,9 @@ class FetchQuestController extends Controller {
         }
 
         return view('fetch_quests.fetch_quest', [
-            'quest'  => $quest,
+            'quest'           => $quest,
             'activeUserQuest' => $quest->activeUserQuest,
-            'quests' => FetchQuest::where('is_active', 1)->get(['name', 'id']),
+            'quests'          => FetchQuest::where('is_active', 1)->get(['name', 'id']),
         ]);
     }
 
@@ -103,7 +102,7 @@ class FetchQuestController extends Controller {
 
         return redirect()->back();
     }
-    
+
     /**
      * Abandons the fetch quest.
      *

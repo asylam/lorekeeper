@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Exceptions\FetchQuestException;
+use App\Models\Currency\Currency;
 use App\Models\FetchQuest\FetchQuest;
 use App\Models\FetchQuest\UserQuest;
 use App\Models\Item\Item;
-use App\Models\Currency\Currency;
 use App\Models\User\User;
 use App\Models\User\UserCurrency;
 use App\Models\User\UserItem;
@@ -212,11 +212,11 @@ class FetchQuestManager extends Service {
 
     private function handleFailure(\Throwable $e, $action, $quest = null, $user = null) {
         \Log::warning('Fetch quest action failed.', [
-            'action' => $action,
-            'quest_id' => $quest instanceof FetchQuest ? $quest->id : null,
-            'user_id' => $user ? $user->id : null,
+            'action'    => $action,
+            'quest_id'  => $quest instanceof FetchQuest ? $quest->id : null,
+            'user_id'   => $user ? $user->id : null,
             'exception' => get_class($e),
-            'message' => $e->getMessage(),
+            'message'   => $e->getMessage(),
         ]);
 
         $this->setError('error', $e instanceof FetchQuestException ? $e->getMessage() : 'An unexpected error occurred. Please try again.');

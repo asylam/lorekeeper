@@ -2,10 +2,9 @@
 
 namespace App\Models\FetchQuest;
 
-use App\Models\FetchQuest\UserQuest;
 use App\Models\Loot\LootTable;
-use App\Models\User\User;
 use App\Models\Model;
+use App\Models\User\User;
 use Illuminate\Support\Facades\Auth;
 
 class FetchQuest extends Model {
@@ -15,7 +14,7 @@ class FetchQuest extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'is_active', 'has_image', 'description', 'parsed_description', 
+        'name', 'is_active', 'has_image', 'description', 'parsed_description',
         'greeting_message', 'request_message', 'completion_message', 'expired_message',
         'request_table_id', 'reward_table_id', 'hash',
     ];
@@ -40,16 +39,16 @@ class FetchQuest extends Model {
      * @var array
      */
     public static $createRules = [
-        'name'               => 'required|unique:fetch_quests|between:3,100',
-        'description'        => 'nullable',
-        'parsed_description' => 'nullable',
-        'greeting_message'   => 'nullable',
-        'request_message'    => 'nullable',
-        'completion_message' => 'nullable',
-        'expired_message'    => 'nullable',
+        'name'                => 'required|unique:fetch_quests|between:3,100',
+        'description'         => 'nullable',
+        'parsed_description'  => 'nullable',
+        'greeting_message'    => 'nullable',
+        'request_message'     => 'nullable',
+        'completion_message'  => 'nullable',
+        'expired_message'     => 'nullable',
         'request_table_id'    => 'required|exists:loot_tables,id',
         'reward_table_id'     => 'required|exists:loot_tables,id',
-        'image'              => 'mimes:png',
+        'image'               => 'mimes:png',
     ];
 
     /**
@@ -58,16 +57,16 @@ class FetchQuest extends Model {
      * @var array
      */
     public static $updateRules = [
-        'name'               => 'required|between:3,100',
-        'description'        => 'nullable',
-        'parsed_description' => 'nullable',
-        'greeting_message'   => 'nullable',
-        'request_message'    => 'nullable',
-        'completion_message' => 'nullable',
-        'expired_message'    => 'nullable',
+        'name'                => 'required|between:3,100',
+        'description'         => 'nullable',
+        'parsed_description'  => 'nullable',
+        'greeting_message'    => 'nullable',
+        'request_message'     => 'nullable',
+        'completion_message'  => 'nullable',
+        'expired_message'     => 'nullable',
         'request_table_id'    => 'required|exists:loot_tables,id',
         'reward_table_id'     => 'required|exists:loot_tables,id',
-        'image'              => 'mimes:png',
+        'image'               => 'mimes:png',
     ];
 
     /**********************************************************************************************
@@ -98,7 +97,7 @@ class FetchQuest extends Model {
 
     /**
      * Gets the current user's active quest for this quest, if it exists.
-     * 
+     *
      * @return App\Models\FetchQuest\UserQuest|null
      */
     public function getActiveUserQuestAttribute() {
@@ -110,8 +109,6 @@ class FetchQuest extends Model {
     /**
      * Gets the specified user's active quest for this fetch quest, if it exists.
      *
-     * @param \App\Models\User\User $user
-     *
      * @return \App\Models\FetchQuest\UserQuest|null
      */
     public function getActiveUserQuestForUser(User $user) {
@@ -122,7 +119,7 @@ class FetchQuest extends Model {
 
         return $userQuest && $userQuest->active ? $userQuest : null;
     }
-    
+
     /**
      * Gets the file directory containing the model's image.
      *
