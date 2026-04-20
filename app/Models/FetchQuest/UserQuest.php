@@ -5,11 +5,9 @@ namespace App\Models\FetchQuest;
 use App\Models\Item\Item;
 use App\Models\User\User;
 use App\Models\Model;
+use App\Models\Loot\LootTable;
 
 class UserQuest extends Model {
-    const STATUS_ACCEPTED = 1;
-    const STATUS_COMPLETED = 2;
-    const STATUS_EXPIRED = 3;
 
     public $timestamps = true;
 
@@ -19,7 +17,7 @@ class UserQuest extends Model {
      * @var array
      */
     protected $fillable = [
-        'fetch_quest_id', 'user_id', 'status', 'due_at', 
+        'fetch_quest_id', 'user_id', 'status', 'due_at',
         'completed_at', 'expired_at', 'created_at'
     ];
 
@@ -78,6 +76,34 @@ class UserQuest extends Model {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get all request quest items.
+     */
+    public function requestItems() {
+        return $this->hasMany(QuestItem::class, 'user_quest_id')->where('type', 'request');
+    }
+
+    /**
+     * Get all reward quest items.
+     */
+    public function rewardItems() {
+        return $this->hasMany(QuestItem::class, 'user_quest_id')->where('type', 'reward');
+    }
+
+    /**
+     * Get the fetch quest's request loot table (for display purposes).
+     */
+    public function getRequestLootTableAttribute() {
+        return $this->fetchQuest->requestTable ?? null;
+    }
+
+    /**
+     * Get the fetch quest's reward loot table (for display purposes).
+     */
+    public function getRewardLootTableAttribute() {
+        return $this->fetchQuest->rewardTable ?? null;
+    }
+
     /**********************************************************************************************
 
         ACCESSORS
@@ -92,7 +118,7 @@ class UserQuest extends Model {
      * @return bool
      */
     public function getAcceptedAttribute() {
-        return $this->status == self::STATUS_ACCEPTED;
+        return $this->status === 'accepted';
     }
     
     /**
@@ -101,7 +127,7 @@ class UserQuest extends Model {
      * @return bool
      */
     public function getCompletedAttribute() {
-        return $this->status == self::STATUS_COMPLETED;
+        return $this->status === 'completed';
     }
 
     /**
@@ -110,7 +136,7 @@ class UserQuest extends Model {
      * @return bool
      */
     public function getExpiredAttribute() {
-        return $this->status == self::STATUS_EXPIRED;
+        return $this->status === 'expired';
     }
 
     /**
@@ -130,5 +156,40 @@ class UserQuest extends Model {
      */
     public function getActiveAttribute() {
         return $this->created_at->isToday() || $this->past_due;
+    }
+
+    /**
+     * Gets display names for all reward items.
+     *
+     * @return array
+     */
+    public function getRewardDisplayNamesAttribute() {
+        return $this->rewardItems->map(fn($item) => $item->display_name)->toArray();
+    }
+
+    /**********************************************************************************************
+
+        EVENTS
+
+    **********************************************************************************************/
+
+    /**
+     * Roll the loot tables from the fetch quest and assign quest items.
+     * Called automatically on model creation.
+     */
+    public static function boot() {
+        parent::boot();
+
+        static::created(function ($userQuest) {
+            $fetchQuest = FetchQuest::find($userQuest->fetch_quest_id);
+
+            if ($fetchQuest) {
+                // Roll and create request quest item
+                QuestItem::createFromRolledLoot($userQuest, 'request', $fetchQuest->requestTable);
+                
+                // Roll and create reward quest item
+                QuestItem::createFromRolledLoot($userQuest, 'reward', $fetchQuest->rewardTable);
+            }
+        });
     }
 }

@@ -90,12 +90,12 @@
     <div class="row">
         <div class="col-md">
             <div class="form-group">
-                {!! Form::label('Request Item') !!}
-                {!! Form::select('request_item_id', $request_item_id, $quest->request_item_id, ['class' => 'selectize form-control']) !!}
+                {!! Form::label('Request Loot Table') !!}
+                {!! Form::select('request_table_id', $lootTables, $quest->request_table_id, ['class' => 'selectize form-control', 'placeholder' => 'Select a loot table']) !!}
             </div>
             <div class="form-group">
-                {!! Form::label('Reward Item') !!}
-                {!! Form::select('reward_item_id', $reward_item_id, $quest->reward_item_id, ['class' => 'selectize form-control']) !!}
+                {!! Form::label('Reward Loot Table') !!}
+                {!! Form::select('reward_table_id', $lootTables, $quest->reward_table_id, ['class' => 'selectize form-control', 'placeholder' => 'Select a loot table']) !!}
             </div>
         </div>
     </div>

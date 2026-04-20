@@ -66,10 +66,10 @@ class FetchQuestController extends Controller {
             flash('Fetch quest accepted successfully.')->success();
 
             return redirect()->to('fetch-quests/'.$id);
-        } else {
-            foreach ($manager->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+        }
+
+        foreach ($manager->getError('error') as $error) {
+            flash($error)->error();
         }
 
         return redirect()->back();
@@ -84,14 +84,21 @@ class FetchQuestController extends Controller {
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function postCompleteFetchQuest(Request $request, FetchQuestManager $manager, $id) {
-        if ($id && $manager->completeFetchQuest($quest = FetchQuest::find($id), Auth::user())) {
-            flash('Fetch quest completed successfully. Received 1x '.$quest->rewardItem->name.'.')->success();
+        $quest = FetchQuest::find($id);
+        $rewardText = 'your rewards';
+
+        if ($quest && $quest->activeUserQuest && count($quest->activeUserQuest->reward_display_names)) {
+            $rewardText = implode(', ', $quest->activeUserQuest->reward_display_names);
+        }
+
+        if ($id && $manager->completeFetchQuest($quest, Auth::user())) {
+            flash('Fetch quest completed successfully. Received '.$rewardText.'.')->success();
 
             return redirect()->to('fetch-quests/'.$id);
-        } else {
-            foreach ($manager->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+        }
+
+        foreach ($manager->getError('error') as $error) {
+            flash($error)->error();
         }
 
         return redirect()->back();
@@ -110,10 +117,10 @@ class FetchQuestController extends Controller {
             flash('Fetch quest abandoned successfully.')->success();
 
             return redirect()->to('fetch-quests/'.$id);
-        } else {
-            foreach ($manager->errors()->getMessages()['error'] as $error) {
-                flash($error)->error();
-            }
+        }
+
+        foreach ($manager->getError('error') as $error) {
+            flash($error)->error();
         }
 
         return redirect()->back();

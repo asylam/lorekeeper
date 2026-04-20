@@ -3,7 +3,7 @@
 namespace App\Models\FetchQuest;
 
 use App\Models\FetchQuest\UserQuest;
-use App\Models\Item\Item;
+use App\Models\Loot\LootTable;
 use App\Models\User\User;
 use App\Models\Model;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ class FetchQuest extends Model {
     protected $fillable = [
         'name', 'is_active', 'has_image', 'description', 'parsed_description', 
         'greeting_message', 'request_message', 'completion_message', 'expired_message',
-        'request_item_id', 'reward_item_id', 'hash',
+        'request_table_id', 'reward_table_id', 'hash',
     ];
 
     /**
@@ -32,7 +32,7 @@ class FetchQuest extends Model {
      *
      * @var array
      */
-    protected $with = ['requestItem', 'rewardItem'];
+    protected $with = ['requestTable', 'rewardTable'];
 
     /**
      * Validation rules for quest creation.
@@ -47,8 +47,8 @@ class FetchQuest extends Model {
         'request_message'    => 'nullable',
         'completion_message' => 'nullable',
         'expired_message'    => 'nullable',
-        'request_item_id'    => 'required|exists:items,id',
-        'reward_item_id'     => 'required|exists:items,id',
+        'request_table_id'    => 'required|exists:loot_tables,id',
+        'reward_table_id'     => 'required|exists:loot_tables,id',
         'image'              => 'mimes:png',
     ];
 
@@ -65,8 +65,8 @@ class FetchQuest extends Model {
         'request_message'    => 'nullable',
         'completion_message' => 'nullable',
         'expired_message'    => 'nullable',
-        'request_item_id'    => 'required|exists:items,id',
-        'reward_item_id'     => 'required|exists:items,id',
+        'request_table_id'    => 'required|exists:loot_tables,id',
+        'reward_table_id'     => 'required|exists:loot_tables,id',
         'image'              => 'mimes:png',
     ];
 
@@ -77,17 +77,17 @@ class FetchQuest extends Model {
     **********************************************************************************************/
 
     /**
-     * Get the item that is requested.
+     * Get the loot table for requested items.
      */
-    public function requestItem() {
-        return $this->belongsTo(Item::class, 'request_item_id');
+    public function requestTable() {
+        return $this->belongsTo(LootTable::class, 'request_table_id');
     }
 
     /**
-     * Get the item that is rewarded.
+     * Get the loot table for rewarded items.
      */
-    public function rewardItem() {
-        return $this->belongsTo(Item::class, 'reward_item_id');
+    public function rewardTable() {
+        return $this->belongsTo(LootTable::class, 'reward_table_id');
     }
 
     /**********************************************************************************************
@@ -102,9 +102,23 @@ class FetchQuest extends Model {
      * @return App\Models\FetchQuest\UserQuest|null
      */
     public function getActiveUserQuestAttribute() {
+        $user = Auth::user();
+
+        return $user ? $this->getActiveUserQuestForUser($user) : null;
+    }
+
+    /**
+     * Gets the specified user's active quest for this fetch quest, if it exists.
+     *
+     * @param \App\Models\User\User $user
+     *
+     * @return \App\Models\FetchQuest\UserQuest|null
+     */
+    public function getActiveUserQuestForUser(User $user) {
         $userQuest = UserQuest::where('fetch_quest_id', $this->id)
-            ->where('user_id', Auth::user()->id)
-            ->latest()->first();
+            ->where('user_id', $user->id)
+            ->latest()
+            ->first();
 
         return $userQuest && $userQuest->active ? $userQuest : null;
     }

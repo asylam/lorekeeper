@@ -13,11 +13,31 @@
   @endif
   <div class="col-md-6">
       <h3>Request:</h3>
-      @include('fetch_quests._quest_item', ['item' => $quest->requestItem, 'isPage' => true])
+      @if ($activeUserQuest->requestItems->count())
+          <div class="row justify-content-center">
+              @foreach ($activeUserQuest->requestItems as $questItem)
+                  <div class="{{ $activeUserQuest->requestItems->count() == 1 ? 'col-12' : 'col-md-6 col-sm-6 col-xs-12' }}">
+                      @include('fetch_quests._quest_rewardable', ['questItem' => $questItem])
+                  </div>
+              @endforeach
+          </div>
+      @else
+          <div class="alert alert-danger">No request item</div>
+      @endif
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6 text-center">
       <h3>Reward:</h3>
-      @include('fetch_quests._quest_item', ['item' => $quest->rewardItem, 'isPage' => true])
+      @if ($activeUserQuest->rewardItems->count())
+          <div class="row justify-content-center">
+              @foreach ($activeUserQuest->rewardItems as $questItem)
+                  <div class="{{ $activeUserQuest->rewardItems->count() == 1 ? 'col-12' : 'col-md-6 col-sm-6 col-xs-12' }}">
+                      @include('fetch_quests._quest_rewardable', ['questItem' => $questItem])
+                  </div>
+              @endforeach
+          </div>
+      @else
+          <div class="alert alert-danger">No reward item</div>
+      @endif
   </div>
 </div>
 <div class="row text-center">

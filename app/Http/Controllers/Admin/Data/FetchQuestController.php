@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Data;
 use App\Http\Controllers\Controller;
 use App\Models\FetchQuest\FetchQuest;
 use App\Models\Item\Item;
+use App\Models\Loot\LootTable;
 use App\Services\FetchQuestService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,10 +49,9 @@ class FetchQuestController extends Controller {
      */
     public function getCreateFetchQuest() {
         return view('admin.fetch_quests.create_edit_fetch_quest', [
-            'quest'           => new FetchQuest,
-            'is_active'       => [1, 2],
-            'request_item_id' => Item::orderBy('name')->pluck('name', 'id'),
-            'reward_item_id'  => Item::orderBy('name')->pluck('name', 'id'),
+            'quest'       => new FetchQuest,
+            'is_active'   => [1, 2],
+            'lootTables'  => LootTable::orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -69,10 +69,9 @@ class FetchQuestController extends Controller {
         }
 
         return view('admin.fetch_quests.create_edit_fetch_quest', [
-            'quest'           => $quest,
-            'is_active'       => [1, 2],
-            'request_item_id' => Item::orderBy('name')->pluck('name', 'id'),
-            'reward_item_id'  => Item::orderBy('name')->pluck('name', 'id'),
+            'quest'       => $quest,
+            'is_active'   => [1, 2],
+            'lootTables'  => LootTable::orderBy('name')->pluck('name', 'id'),
         ]);
     }
 
@@ -89,7 +88,7 @@ class FetchQuestController extends Controller {
         $data = $request->only([
             'name', 'is_active', 'image', 'remove_image', 'description',
             'greeting_message', 'request_message', 'completion_message',
-            'expired_message', 'request_item_id', 'reward_item_id',
+            'expired_message', 'request_table_id', 'reward_table_id',
         ]);
         if ($id && $service->updateFetchQuest(FetchQuest::find($id), $data, Auth::user())) {
             flash('Fetch quest updated successfully.')->success();
