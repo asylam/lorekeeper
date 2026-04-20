@@ -15,9 +15,8 @@
     @elseif ($activeUserQuest->past_due)
         @include('fetch_quests._quest_past_due', ['quest' => $quest, 'isPage' => true])
     @elseif ($activeUserQuest->accepted)
-        @include('fetch_quests._quest_request', ['quest' => $quest, 'isPage' => true])  
+        @include('fetch_quests._quest_request', ['quest' => $quest, 'isPage' => true])
     @else
         @include('fetch_quests._quest_complete', ['quest' => $quest, 'isPage' => true])
     @endif
-
 @endsection

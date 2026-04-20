@@ -19,8 +19,8 @@
                     </div>
                 </div>
             </div>
-            @break
-        
+        @break
+
         @case('Currency')
             @php $currency = $questItem->rewardable; @endphp
             <div class="text-center">
@@ -29,8 +29,8 @@
                     {!! $currency->display($questItem->quantity) !!}
                 </div>
             </div>
-            @break
-        
+        @break
+
         @default
             <div class="alert alert-warning text-center" role="alert">
                 Unknown item type: {{ $questItem->rewardable_type }}
